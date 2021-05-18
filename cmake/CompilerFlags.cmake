@@ -1,4 +1,7 @@
 function(set_compiler_options PROJECT_NAME ENABLE_WERROR)
+    add_compile_options(--coverage)
+    add_link_options(--coverage -lgcov)
+
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         if(ENABLE_WERROR)
             target_compile_options("${PROJECT_NAME}" PRIVATE

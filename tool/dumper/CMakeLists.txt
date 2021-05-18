@@ -46,7 +46,7 @@ if(ICD_BUILD_LLPC)
 endif()
 
 target_link_libraries(dumper PUBLIC metrohash)
-target_link_libraries(dumper PRIVATE cwpack)
+target_link_libraries(dumper PRIVATE cwpack gcov)
 target_link_libraries(dumper PRIVATE
     khronos_vulkan_interface
     khronos_spirv_interface
