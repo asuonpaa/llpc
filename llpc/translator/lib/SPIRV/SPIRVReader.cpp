@@ -80,7 +80,7 @@
 #include <map>
 #include <set>
 #include <sstream>
-
+#include "coverage_print.h"
 #define DEBUG_TYPE "spirv"
 
 using namespace std;
@@ -409,7 +409,7 @@ Type *SPIRVToLLVM::transTypeWithOpcode<OpTypePointer>(SPIRVType *const spvType, 
 
   // Handle image etc types first, if in UniformConstant memory.
   if (storageClass == StorageClassUniformConstant) {
-    auto spvElementType = spvType->getPointerElementType();
+    COVPOINT_ASSERT("SpirvReader412"); auto spvElementType = spvType->getPointerElementType();
     while (spvElementType->getOpCode() == OpTypeArray || spvElementType->getOpCode() == OpTypeRuntimeArray) {
       // Pointer to array (or runtime array) of image/sampler/sampledimage has the same representation as
       // a simple pointer to same image/sampler/sampledimage.
@@ -4448,7 +4448,7 @@ Value *SPIRVToLLVM::transValueWithoutDecoration(SPIRVValue *bv, Function *f, Bas
       if (!arg) {
         // This arg is a variable that is (array of) image/sampler/sampledimage.
         // Materialize it.
-        assert(bArg->getOpCode() == OpVariable);
+        COVPOINT_ASSERT("SpirvReader4451"); assert(bArg->getOpCode() == OpVariable);
         arg = transImagePointer(bArg);
       }
       args.push_back(arg);
@@ -7042,8 +7042,8 @@ unsigned SPIRVToLLVM::calcShaderBlockSize(SPIRVType *bt, unsigned blockSize, uns
       bool isMemberRowMajor = isRowMajor;
       if (bt->hasMemberDecorate(memberIdxWithMaxOffset, DecorationRowMajor))
         isMemberRowMajor = true;
-      else if (bt->hasMemberDecorate(memberIdxWithMaxOffset, DecorationColMajor))
-        isMemberRowMajor = false;
+      else if (bt->hasMemberDecorate(memberIdxWithMaxOffset, DecorationColMajor)) {
+        COVPOINT_ASSERT("SpirvReader7046"); isMemberRowMajor = false; }
 
       SPIRVType *memberTy = bt->getStructMemberType(memberIdxWithMaxOffset);
       blockSize += calcShaderBlockSize(memberTy, maxOffset, memberMatrixStride, isMemberRowMajor);
@@ -7056,7 +7056,7 @@ unsigned SPIRVToLLVM::calcShaderBlockSize(SPIRVType *bt, unsigned blockSize, uns
       unsigned numElems = bt->getArrayLength();
       blockSize += numElems * arrayStride;
     } else {
-      assert(matrixStride != SPIRVID_INVALID);
+      COVPOINT_ASSERT("SpirvReader7059"); assert(matrixStride != SPIRVID_INVALID);
       unsigned numVectors =
           isRowMajor ? bt->getMatrixColumnType()->getVectorComponentCount() : bt->getMatrixColumnCount();
       blockSize += numVectors * matrixStride;

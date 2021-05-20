@@ -44,7 +44,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include <algorithm>
 #include <set>
-
+#include "coverage_print.h"
 #define DEBUG_TYPE "lgc-patch-resource-collect"
 
 using namespace llvm;
@@ -1080,8 +1080,8 @@ void PatchResourceCollect::visitCallInst(CallInst &callInst) {
       m_inputCalls.push_back(&callInst);
   } else if (mangledName.startswith(lgcName::InputImportBuiltIn)) {
     // Built-in input import
-    if (isDeadCall)
-      m_deadCalls.push_back(&callInst);
+    if (isDeadCall) {
+      COVPOINT_ASSERT("PathResourceCollect1084"); m_deadCalls.push_back(&callInst); }
     else {
       unsigned builtInId = cast<ConstantInt>(callInst.getOperand(0))->getZExtValue();
       m_activeInputBuiltIns.insert(builtInId);
@@ -1203,8 +1203,8 @@ void PatchResourceCollect::clearInactiveBuiltInInput() {
     if (builtInUsage.gs.invocationId && m_activeInputBuiltIns.find(BuiltInInvocationId) == m_activeInputBuiltIns.end())
       builtInUsage.gs.invocationId = false;
   } else if (m_shaderStage == ShaderStageFragment) {
-    if (builtInUsage.fs.fragCoord && m_activeInputBuiltIns.find(BuiltInFragCoord) == m_activeInputBuiltIns.end())
-      builtInUsage.fs.fragCoord = false;
+    if (builtInUsage.fs.fragCoord && m_activeInputBuiltIns.find(BuiltInFragCoord) == m_activeInputBuiltIns.end()) {
+      COVPOINT_ASSERT("PathResourceCollect1207"); builtInUsage.fs.fragCoord = false; }
 
     if (builtInUsage.fs.frontFacing && m_activeInputBuiltIns.find(BuiltInFrontFacing) == m_activeInputBuiltIns.end())
       builtInUsage.fs.frontFacing = false;

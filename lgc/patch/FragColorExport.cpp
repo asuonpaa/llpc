@@ -41,7 +41,7 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IntrinsicsAMDGPU.h"
-
+#include "coverage_print.h"
 #define DEBUG_TYPE "lgc-frag-color-export"
 
 using namespace lgc;
@@ -467,8 +467,8 @@ bool LowerFragColorExport::runOnModule(Module &module) {
       break;
     }
   }
-  if (!retInst)
-    return false;
+  if (!retInst) {
+    COVPOINT_ASSERT("FragColorExport471"); return false;}
 
   BuilderBase builder(module.getContext());
   builder.SetInsertPoint(retInst);

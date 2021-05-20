@@ -44,7 +44,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Utils.h"
 #include "llvm/Transforms/Utils/Local.h"
-
+#include "coverage_print.h"
 #define DEBUG_TYPE_CONST_FOLDING "llpc-spirv-lower-math-const-folding"
 #define DEBUG_TYPE_FLOAT_OP "llpc-spirv-lower-math-float-op"
 
@@ -332,7 +332,7 @@ void SpirvLowerMathFloatOp::visitBinaryOperator(BinaryOperator &binaryOp) {
     if (src1IsConstZero) {
       // NOTE: Source1 is constant zero, we might be performing FNEG operation. This will be optimized
       // by backend compiler with sign bit reversed via XOR. Check floating-point controls.
-      flushDenormIfNeeded(&binaryOp);
+      COVPOINT_ASSERT("LLPCSpirvLowerMath335"); flushDenormIfNeeded(&binaryOp);
     }
   }
 
@@ -342,8 +342,8 @@ void SpirvLowerMathFloatOp::visitBinaryOperator(BinaryOperator &binaryOp) {
     switch (opCode) {
     case Instruction::FAdd:
       if (binaryOp.getFastMathFlags().noNaNs()) {
-        if (src1IsConstZero)
-          dest = src2;
+        if (src1IsConstZero) {
+          COVPOINT_ASSERT("LLPCSpirvLowerMath346"); dest = src2; }
         else if (src2IsConstZero)
           dest = src1;
       }
@@ -352,8 +352,8 @@ void SpirvLowerMathFloatOp::visitBinaryOperator(BinaryOperator &binaryOp) {
       if (binaryOp.getFastMathFlags().noNaNs()) {
         if (src1IsConstZero)
           dest = src1;
-        else if (src2IsConstZero)
-          dest = src2;
+        else if (src2IsConstZero) {
+          COVPOINT_ASSERT("LLPCSpirvLowerMath356"); dest = src2; }
       }
       break;
     case Instruction::FDiv:
@@ -364,8 +364,8 @@ void SpirvLowerMathFloatOp::visitBinaryOperator(BinaryOperator &binaryOp) {
       break;
     case Instruction::FSub:
       if (binaryOp.getFastMathFlags().noNaNs()) {
-        if (src2IsConstZero)
-          dest = src1;
+        if (src2IsConstZero) {
+          COVPOINT_ASSERT("LLPCSpirvLowerMath368"); dest = src1; }
       }
       break;
     default:

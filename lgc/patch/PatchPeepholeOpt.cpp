@@ -35,7 +35,7 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/raw_ostream.h"
-
+#include "coverage_print.h"
 #define DEBUG_TYPE "lgc-patch-peephole-opt"
 
 using namespace lgc;
@@ -320,8 +320,8 @@ void PatchPeepholeOpt::visitExtractElement(ExtractElementInst &extractElement) {
     ConstantInt *const otherIndex = dyn_cast<ConstantInt>(otherExtractElement->getIndexOperand());
 
     // If the other index is not a constant integer, skip.
-    if (!otherIndex)
-      continue;
+    if (!otherIndex) {
+      COVPOINT_ASSERT("PatchPeepholeOpt324"); continue; }
 
     // If the indices do not match, skip.
     if (!otherIndex->equalsInt(index))
@@ -361,8 +361,8 @@ void PatchPeepholeOpt::visitExtractElement(ExtractElementInst &extractElement) {
         ConstantInt *const otherIndex = dyn_cast<ConstantInt>(otherExtractElement->getIndexOperand());
 
         // If the other index is not a constant integer, skip.
-        if (!otherIndex)
-          continue;
+        if (!otherIndex) {
+          COVPOINT_ASSERT("PatchPeepholeOpt365"); continue; }
 
         // If the indices do not match, skip.
         if (!otherIndex->equalsInt(index))
@@ -572,8 +572,8 @@ void PatchPeepholeOpt::visitIntToPtr(IntToPtrInst &intToPtr) {
 // @param after : Where to move after.
 void PatchPeepholeOpt::moveAfter(Instruction &move, Instruction &after) const {
   // Special case for if the instruction is a PHI node, we need to move after all other PHIs.
-  if (isa<PHINode>(&after))
-    move.moveBefore(after.getParent()->getFirstNonPHI());
+  if (isa<PHINode>(&after)) {
+    COVPOINT_ASSERT("PatchPeepholeOpt576"); move.moveBefore(after.getParent()->getFirstNonPHI()); }
   else
     move.moveAfter(&after);
 }
