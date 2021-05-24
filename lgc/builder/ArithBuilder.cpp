@@ -571,7 +571,7 @@ Value *ArithBuilder::CreateATanh(Value *x, const Twine &instName) {
 // @param instName : Name to give instruction(s)
 Value *ArithBuilder::CreatePower(Value *x, Value *y, const Twine &instName) {
   if (x == ConstantFP::get(x->getType(), 2.0)) {
-    COVPOINT_ASSERT("ArithBuilder574"); return CreateUnaryIntrinsic(Intrinsic::exp2, y, nullptr, instName); }
+    COVPOINT("ArithBuilder574"); return CreateUnaryIntrinsic(Intrinsic::exp2, y, nullptr, instName); }
 
   // llvm.pow only works with (vector of) float.
   if (x->getType()->getScalarType()->isFloatTy())

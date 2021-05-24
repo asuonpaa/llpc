@@ -332,7 +332,7 @@ void SpirvLowerMathFloatOp::visitBinaryOperator(BinaryOperator &binaryOp) {
     if (src1IsConstZero) {
       // NOTE: Source1 is constant zero, we might be performing FNEG operation. This will be optimized
       // by backend compiler with sign bit reversed via XOR. Check floating-point controls.
-      COVPOINT_ASSERT("LLPCSpirvLowerMath335"); flushDenormIfNeeded(&binaryOp);
+      COVPOINT("LLPCSpirvLowerMath335"); flushDenormIfNeeded(&binaryOp);
     }
   }
 

@@ -321,7 +321,7 @@ void PatchPeepholeOpt::visitExtractElement(ExtractElementInst &extractElement) {
 
     // If the other index is not a constant integer, skip.
     if (!otherIndex) {
-      COVPOINT_ASSERT("PatchPeepholeOpt324"); continue; }
+      COVPOINT("PatchPeepholeOpt324"); continue; }
 
     // If the indices do not match, skip.
     if (!otherIndex->equalsInt(index))
@@ -573,7 +573,7 @@ void PatchPeepholeOpt::visitIntToPtr(IntToPtrInst &intToPtr) {
 void PatchPeepholeOpt::moveAfter(Instruction &move, Instruction &after) const {
   // Special case for if the instruction is a PHI node, we need to move after all other PHIs.
   if (isa<PHINode>(&after)) {
-    COVPOINT_ASSERT("PatchPeepholeOpt576"); move.moveBefore(after.getParent()->getFirstNonPHI()); }
+    COVPOINT("PatchPeepholeOpt576"); move.moveBefore(after.getParent()->getFirstNonPHI()); }
   else
     move.moveAfter(&after);
 }
